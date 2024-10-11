@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strings"
 )
 
 func main() {
@@ -26,10 +27,16 @@ func performGetRequest() {
 	fmt.Println("Response Body:", string(content))
 }
 
-func performGetRequest() {
+func performPostRequest() {
 	const url = "http://192.168.10.54:7000/health/ping"
+	body := strings.NewReader(`
+		{ 
+			"hy": "hello",
+			"how": "are"
+		}
+ 	`)
 
-	response, err := http.Get(url)
+	response, err := http.Post(url, "application/json", body)
 	if err != nil {
 		panic(err)
 	}
@@ -40,3 +47,5 @@ func performGetRequest() {
 	fmt.Println("Response Status:", response.Status)
 	fmt.Println("Response Body:", string(content))
 }
+
+//skipping form data post, video 30
