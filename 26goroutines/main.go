@@ -7,7 +7,12 @@ import (
 	"time"
 )
 
-var wg sync.WaitGroup
+var wg sync.WaitGroup //usually pointer
+var mut sync.Mutex    //usually pointer
+
+var signals = []string{
+	"test",
+}
 
 func main() {
 	//first method using timer
@@ -26,9 +31,8 @@ func main() {
 		go webRequest(endponint)
 		wg.Add(1)
 	}
-
 	wg.Wait()
-
+	fmt.Println(signals)
 }
 
 func greeter(s string) {
@@ -45,6 +49,9 @@ func webRequest(endpoint string) {
 		fmt.Println(err)
 
 	} else {
+		mut.Lock()
+		signals = append(signals, endpoint)
+		mut.Unlock()
 		fmt.Printf("%d status code on endpoint %s\n", res.StatusCode, endpoint)
 	}
 }
